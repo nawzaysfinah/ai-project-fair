@@ -7,7 +7,7 @@ import {
   FrontSide, Vector3,
 } from 'three';
 import { scene } from './scene';
-import { DOMAINS } from './data';
+import { getDomain } from './data';
 import type { Domain, Project, BoothMeta } from './types';
 
 const ROBLOX_RED = '#E8101A';
@@ -76,11 +76,13 @@ export const boothMeshes: Mesh[] = [];
 export const byDomain: Record<string, Project[]> = {};
 
 export function buildWorld(projects: Project[]): void {
-  DOMAINS.forEach(d => { byDomain[d.id] = []; });
-  projects.forEach(p => { if (byDomain[p.domain]) byDomain[p.domain].push(p); });
+  const domainIds = [...new Set(projects.map(p => p.domain))];
+  domainIds.forEach(id => { byDomain[id] = []; });
+  projects.forEach(p => { byDomain[p.domain].push(p); });
 
   // Zone floors + labels
-  DOMAINS.forEach(dom => {
+  domainIds.forEach(domId => {
+    const dom = getDomain(domId);
     const g = new Group();
     g.position.set(dom.pos.x, 0, dom.pos.z);
 
@@ -125,8 +127,9 @@ export function buildWorld(projects: Project[]): void {
   });
 
   // Booths
-  DOMAINS.forEach(dom => {
-    const projs = byDomain[dom.id];
+  domainIds.forEach(domId => {
+    const dom = getDomain(domId);
+    const projs = byDomain[domId];
     const pos = boothPositions(projs.length);
     const dg = new Group();
     dg.position.set(dom.pos.x, 0, dom.pos.z);

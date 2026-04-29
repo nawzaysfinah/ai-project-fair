@@ -44,6 +44,34 @@ export const DOMAINS: Domain[] = [
   { id: 'social',    name: 'Social & Civic Tech',    color: '#E74C3C', hex: 0xE74C3C, icon: '🌍', pos: { x:   0, z:  46 } },
 ];
 
+const AUTO_COLORS = ['#E67E22','#8E44AD','#16A085','#D35400','#2980B9','#C0392B','#27AE60','#7F8C8D','#F39C12','#1ABC9C'];
+
+function hashStr(s: string): number {
+  let h = 5381;
+  for (let i = 0; i < s.length; i++) h = ((h << 5) + h) ^ s.charCodeAt(i);
+  return Math.abs(h);
+}
+
+const domainCache: Record<string, Domain> = {};
+
+export function getDomain(id: string): Domain {
+  const known = DOMAINS.find(d => d.id === id);
+  if (known) return known;
+  if (domainCache[id]) return domainCache[id];
+  const h  = hashStr(id);
+  const color = AUTO_COLORS[h % AUTO_COLORS.length];
+  const angle = (h % 628) / 100; // 0..2π deterministically
+  const name  = id.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  const dom: Domain = {
+    id, name, color,
+    hex: parseInt(color.slice(1), 16),
+    icon: '📦',
+    pos: { x: Math.round(Math.cos(angle) * 62), z: Math.round(Math.sin(angle) * 62) },
+  };
+  domainCache[id] = dom;
+  return dom;
+}
+
 export const TECH_COLORS: Record<string, string> = {
   'Python': '#3776AB', 'JavaScript': '#F7DF1E', 'TypeScript': '#3178C6',
   'React': '#61DAFB', 'Vue.js': '#4FC08D', 'Node.js': '#68A063',

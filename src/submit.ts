@@ -124,7 +124,8 @@ document.getElementById('submit-form')!.addEventListener('submit', async e => {
   clearError();
 
   const name   = (document.getElementById('f-name')   as HTMLInputElement).value.trim();
-  const domain = (document.getElementById('f-domain') as HTMLSelectElement).value;
+  const domainRaw = (document.getElementById('f-domain') as HTMLInputElement).value.trim();
+  const domain = domainRaw.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
   const short  = (document.getElementById('f-short')  as HTMLInputElement).value.trim();
   const full   = (document.getElementById('f-full')   as HTMLTextAreaElement).value.trim();
   const emoji  = (document.getElementById('f-emoji')  as HTMLInputElement).value.trim() || '🚀';
@@ -135,7 +136,7 @@ document.getElementById('submit-form')!.addEventListener('submit', async e => {
   const validMembers: Member[] = members.filter(m => m.name);
 
   if (!name)              return showError('Project name is required.');
-  if (!domain)            return showError('Please select a domain.');
+  if (!domain)            return showError('Domain is required.');
   if (!short)             return showError('One-line pitch is required.');
   if (!full)              return showError('Full description is required.');
   if (tech.length === 0)  return showError('Add at least one technology.');

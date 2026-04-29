@@ -32,15 +32,22 @@
       <!-- Domain -->
       <div class="field">
         <label for="f-domain">Domain <span class="req">*</span></label>
-        <select id="f-domain" required>
-          <option value="">— select a domain —</option>
-          <option value="ai-ml">🤖 AI &amp; Machine Learning</option>
-          <option value="health">🏥 Health &amp; Wellbeing</option>
-          <option value="finance">💰 Finance &amp; FinTech</option>
-          <option value="creative">🎨 Creative &amp; Media</option>
-          <option value="education">📚 Education &amp; Learning</option>
-          <option value="social">🌍 Social &amp; Civic Tech</option>
-        </select>
+        <input id="f-domain" type="text" list="domain-suggestions" placeholder="e.g. Robotics, Cybersecurity, Sustainability…" required autocomplete="off">
+        <datalist id="domain-suggestions">
+          <option value="AI &amp; Machine Learning">
+          <option value="Health &amp; Wellbeing">
+          <option value="Finance &amp; FinTech">
+          <option value="Creative &amp; Media">
+          <option value="Education &amp; Learning">
+          <option value="Social &amp; Civic Tech">
+          <option value="Robotics">
+          <option value="Cybersecurity">
+          <option value="Sustainability">
+          <option value="Gaming">
+          <option value="IoT">
+          <option value="Blockchain">
+        </datalist>
+        <span class="hint">Type your own or pick a suggestion — this becomes a zone on the fair floor</span>
       </div>
 
       <!-- One-line pitch -->

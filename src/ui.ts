@@ -2,7 +2,7 @@ import { Raycaster, Vector2, Vector3 } from 'three';
 import { camera, renderer } from './scene';
 import { player, camYaw, setCamYaw, setTourActive, isTourActive, dragMoved } from './player';
 import { boothMeshes, byDomain, getBoothWorldPos } from './world';
-import { DOMAINS, TECH_COLORS } from './data';
+import { getDomain, TECH_COLORS } from './data';
 import type { Project, Domain, BoothMeta } from './types';
 
 // ── RAYCASTING ────────────────────────────────────────────────
@@ -116,18 +116,20 @@ document.getElementById('panel-close')!.addEventListener('click', () => {
 
 export function initLegend(projects: Project[]): void {
   allProjects = projects;
+  const domainIds = [...new Set(projects.map(p => p.domain))];
   const el = document.getElementById('legend')!;
-  el.innerHTML = '<h4>Domains</h4>' + DOMAINS.map(d => `
-    <div class="leg-item" data-id="${d.id}">
+  el.innerHTML = '<h4>Domains</h4>' + domainIds.map(id => {
+    const d = getDomain(id);
+    return `<div class="leg-item" data-id="${id}">
       <div class="leg-dot" style="background:${d.color}"></div>
       <span>${d.icon} ${d.name}</span>
-      <span class="leg-count">${byDomain[d.id]?.length ?? 0}</span>
-    </div>`).join('');
+      <span class="leg-count">${byDomain[id]?.length ?? 0}</span>
+    </div>`;
+  }).join('');
 
   el.querySelectorAll<HTMLElement>('.leg-item').forEach(item => {
     item.addEventListener('click', () => {
-      const d = DOMAINS.find(x => x.id === item.dataset['id']);
-      if (!d) return;
+      const d = getDomain(item.dataset['id']!);
       player.position.set(d.pos.x, 0, d.pos.z + 15);
       setCamYaw(Math.PI);
       stopTour();
@@ -146,7 +148,8 @@ export function drawMinimap(): void {
   mc.clearRect(0, 0, MSZ, MSZ);
   mc.fillStyle = 'rgba(68,187,51,0.15)'; mc.fillRect(0, 0, MSZ, MSZ);
 
-  DOMAINS.forEach(d => {
+  [...new Set(allProjects.map(p => p.domain))].forEach(id => {
+    const d  = getDomain(id);
     const mp = toMap(d.pos.x, d.pos.z); const s = 30 * WR;
     mc.fillStyle = d.color + '44'; mc.fillRect(mp.x - s / 2, mp.y - s / 2, s, s);
     mc.strokeStyle = d.color; mc.lineWidth = 1.5;
@@ -209,7 +212,7 @@ export function initSearch(projects: Project[]): void {
 
     sRes.innerHTML = matches.length
       ? matches.map(p => {
-          const d = DOMAINS.find(x => x.id === p.domain)!;
+          const d = getDomain(p.domain);
           return `<div class="s-item" data-id="${p.id}">
             <span style="color:${d.color};font-weight:700">${p.emoji} ${p.name}</span>
             <div class="s-item-sub">${p.student} · ${d.name}</div>
@@ -220,7 +223,7 @@ export function initSearch(projects: Project[]): void {
     sRes.querySelectorAll<HTMLElement>('.s-item[data-id]').forEach(item => {
       item.addEventListener('click', () => {
         const proj = allProjects.find(p => p.id === Number(item.dataset['id']))!;
-        const dom  = DOMAINS.find(d => d.id === proj.domain)!;
+        const dom  = getDomain(proj.domain);
         const wp   = getBoothWorldPos(proj);
         if (wp) { player.position.set(wp.x, 0, wp.z + 7); setCamYaw(Math.PI); }
         else    { player.position.set(dom.pos.x, 0, dom.pos.z + 12); setCamYaw(Math.PI); }
@@ -254,7 +257,7 @@ function buildTourWaypoints(): Waypoint[] {
   return [
     { pos: new Vector3(0, 0, 10), label: 'Welcome to the Student Project Fair! 🎓', proj: null },
     ...allProjects.map(p => {
-      const d  = DOMAINS.find(x => x.id === p.domain)!;
+      const d  = getDomain(p.domain);
       const wp = getBoothWorldPos(p);
       const pos = wp ? new Vector3(wp.x, 0, wp.z + 7) : new Vector3(d.pos.x, 0, d.pos.z + 7);
       return { pos, label: `${p.emoji} ${p.name} — ${p.student}`, proj: p, dom: d };

@@ -82,6 +82,14 @@ canvas { display: block; }
 #tour-btn:hover { background: #c00d16; transform: translateY(-1px); }
 #tour-btn.active { background: #333; }
 
+.submit-btn {
+  background: #fff; border: 2px solid #E8101A; color: #E8101A;
+  padding: 8px 16px; border-radius: 6px; cursor: pointer;
+  font-size: 0.85rem; font-weight: 900; transition: all 0.15s;
+  white-space: nowrap; text-decoration: none; letter-spacing: 0.02em;
+}
+.submit-btn:hover { background: #E8101A; color: #fff; transform: translateY(-1px); }
+
 /* ── LEGEND ──────────────────────────────────────────── */
 #legend {
   position: fixed; left: 16px; top: 50%; transform: translateY(-50%);

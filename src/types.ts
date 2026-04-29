@@ -7,10 +7,15 @@ export interface Domain {
   pos: { x: number; z: number };
 }
 
+export interface Member {
+  name: string;
+  linkedin: string;
+}
+
 export interface Project {
   id: number;
   name: string;
-  student: string;
+  student: string;      // derived: comma-separated member names
   domain: string;
   tech: string[];
   tags: string[];
@@ -18,6 +23,8 @@ export interface Project {
   full: string;
   emoji: string;
   link: string;
+  image_url?: string;
+  members?: Member[];
   thumbnail?: string;
 }
 

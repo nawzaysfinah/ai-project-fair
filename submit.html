@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Submit Your Project — Student Project Fair</title>
+  <link rel="stylesheet" href="/src/submit.css">
+</head>
+<body>
+
+<div id="topbar-submit">
+  <a href="/" class="back-btn">← Back to Fair</a>
+  <span class="topbar-title">🎓 Student Project Fair</span>
+</div>
+
+<div id="submit-wrap">
+  <div id="submit-card">
+    <div id="submit-header">
+      <div id="submit-red-bar">SUBMIT YOUR PROJECT</div>
+      <h1>Add Your Booth</h1>
+      <p>Fill in the details below — your project goes live immediately as a booth on the fair floor.</p>
+    </div>
+
+    <form id="submit-form" novalidate>
+
+      <!-- Project name -->
+      <div class="field">
+        <label for="f-name">Project Name <span class="req">*</span></label>
+        <input id="f-name" type="text" placeholder="e.g. MediScan AI" required maxlength="80">
+      </div>
+
+      <!-- Domain -->
+      <div class="field">
+        <label for="f-domain">Domain <span class="req">*</span></label>
+        <select id="f-domain" required>
+          <option value="">— select a domain —</option>
+          <option value="ai-ml">🤖 AI &amp; Machine Learning</option>
+          <option value="health">🏥 Health &amp; Wellbeing</option>
+          <option value="finance">💰 Finance &amp; FinTech</option>
+          <option value="creative">🎨 Creative &amp; Media</option>
+          <option value="education">📚 Education &amp; Learning</option>
+          <option value="social">🌍 Social &amp; Civic Tech</option>
+        </select>
+      </div>
+
+      <!-- One-line pitch -->
+      <div class="field">
+        <label for="f-short">One-line Pitch <span class="req">*</span></label>
+        <input id="f-short" type="text" placeholder="e.g. Detects skin conditions from photos using deep learning" required maxlength="160">
+        <span class="hint">Shown on hover — keep it punchy</span>
+      </div>
+
+      <!-- Full description -->
+      <div class="field">
+        <label for="f-full">Full Description <span class="req">*</span></label>
+        <textarea id="f-full" rows="5" placeholder="Describe your project in detail — the problem you solved, how it works, key results…" required maxlength="1200"></textarea>
+      </div>
+
+      <!-- Emoji -->
+      <div class="field field-half">
+        <label for="f-emoji">Booth Emoji <span class="req">*</span></label>
+        <input id="f-emoji" type="text" placeholder="🚀" maxlength="4" value="🚀">
+        <span class="hint">Single emoji representing your project</span>
+      </div>
+
+      <!-- Project link -->
+      <div class="field field-half">
+        <label for="f-link">Project Link</label>
+        <input id="f-link" type="url" placeholder="https://github.com/you/project">
+      </div>
+
+      <!-- Tech stack -->
+      <div class="field">
+        <label>Tech Stack <span class="req">*</span></label>
+        <div id="tech-input-wrap">
+          <div id="tech-chips"></div>
+          <input id="tech-input" type="text" placeholder="Type a technology and press Enter…">
+        </div>
+        <span class="hint">e.g. Python, TensorFlow, React</span>
+      </div>
+
+      <!-- Tags -->
+      <div class="field">
+        <label>Tags</label>
+        <div id="tag-input-wrap">
+          <div id="tag-chips"></div>
+          <input id="tag-input" type="text" placeholder="Type a tag and press Enter…">
+        </div>
+        <span class="hint">e.g. Healthcare, NLP, Gamification</span>
+      </div>
+
+      <!-- Group members -->
+      <div class="field">
+        <label>Group Members <span class="req">*</span></label>
+        <div id="members-list"></div>
+        <button type="button" id="add-member-btn" class="secondary-btn">＋ Add Member</button>
+        <span class="hint">Add all team members — LinkedIn URL is optional</span>
+      </div>
+
+      <!-- Image upload -->
+      <div class="field">
+        <label for="f-image">Project Image / GIF</label>
+        <div id="image-drop" class="drop-zone">
+          <input id="f-image" type="file" accept="image/*,.gif" class="drop-input">
+          <div class="drop-label">
+            <span id="drop-icon">🖼️</span>
+            <span id="drop-text">Drag &amp; drop or <u>browse</u></span>
+            <span class="hint">PNG, JPG, or GIF — max 5 MB</span>
+          </div>
+          <img id="image-preview" alt="preview" style="display:none">
+        </div>
+      </div>
+
+      <div id="submit-error" class="error-box" style="display:none"></div>
+
+      <button type="submit" id="submit-btn" class="submit-primary">
+        <span id="submit-label">🚀 Submit Project</span>
+        <span id="submit-spinner" style="display:none">⏳ Submitting…</span>
+      </button>
+
+    </form>
+
+    <div id="success-box" style="display:none">
+      <div id="success-icon">🎉</div>
+      <h2>Project submitted!</h2>
+      <p>Your booth is now live on the fair floor.</p>
+      <a href="/" class="submit-primary" style="text-decoration:none;display:inline-block;margin-top:12px">
+        Explore the Fair →
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<script type="module" src="/src/submit.ts"></script>
+</body>
+</html>

@@ -1,0 +1,231 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: #87CEEB;
+  min-height: 100vh;
+  color: #111;
+}
+
+/* ── TOP BAR ──────────────────────────────────────────────── */
+
+#topbar-submit {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; align-items: center; gap: 16px;
+  background: #E8101A;
+  padding: 0 20px;
+  height: 48px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+
+.back-btn {
+  color: #fff; text-decoration: none; font-weight: 700; font-size: 14px;
+  padding: 4px 12px; border-radius: 4px; border: 2px solid rgba(255,255,255,0.4);
+  transition: background 0.15s;
+}
+.back-btn:hover { background: rgba(255,255,255,0.18); }
+
+.topbar-title {
+  color: #fff; font-weight: 700; font-size: 16px; margin-left: auto;
+}
+
+/* ── LAYOUT ───────────────────────────────────────────────── */
+
+#submit-wrap {
+  display: flex; justify-content: center;
+  padding: 40px 16px 80px;
+}
+
+#submit-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  width: 100%; max-width: 680px;
+  overflow: hidden;
+}
+
+/* ── HEADER ───────────────────────────────────────────────── */
+
+#submit-header {
+  padding: 0 0 28px;
+}
+
+#submit-red-bar {
+  background: #E8101A;
+  color: #fff; font-weight: 700; font-size: 14px;
+  letter-spacing: 0.06em;
+  padding: 10px 28px;
+}
+
+#submit-header h1 {
+  padding: 20px 28px 4px;
+  font-size: 26px;
+}
+
+#submit-header p {
+  padding: 0 28px;
+  color: #555; font-size: 14px;
+}
+
+/* ── FORM ─────────────────────────────────────────────────── */
+
+#submit-form { padding: 0 28px 32px; }
+
+.field {
+  margin-bottom: 22px;
+}
+
+.field-half {
+  display: inline-block; width: calc(50% - 8px); vertical-align: top;
+}
+.field-half + .field-half { margin-left: 16px; }
+
+label {
+  display: block; font-weight: 600; font-size: 13px;
+  margin-bottom: 6px; color: #222;
+}
+
+.req { color: #E8101A; }
+
+input[type=text], input[type=url], select, textarea {
+  width: 100%; border: 2px solid #ddd; border-radius: 5px;
+  padding: 9px 12px; font-size: 14px; font-family: inherit;
+  transition: border-color 0.15s;
+  background: #fafafa;
+}
+input[type=text]:focus, input[type=url]:focus, select:focus, textarea:focus {
+  outline: none; border-color: #E8101A; background: #fff;
+}
+
+textarea { resize: vertical; }
+
+.hint {
+  display: block; font-size: 11px; color: #888; margin-top: 4px;
+}
+
+/* ── CHIP INPUTS ──────────────────────────────────────────── */
+
+#tech-input-wrap, #tag-input-wrap {
+  border: 2px solid #ddd; border-radius: 5px;
+  padding: 6px 8px; background: #fafafa;
+  display: flex; flex-wrap: wrap; gap: 5px; align-items: center;
+  cursor: text;
+}
+#tech-input-wrap:focus-within, #tag-input-wrap:focus-within {
+  border-color: #E8101A; background: #fff;
+}
+
+#tech-chips, #tag-chips {
+  display: contents;
+}
+
+#tech-input, #tag-input {
+  border: none; outline: none; background: transparent;
+  font-size: 14px; font-family: inherit;
+  flex: 1; min-width: 140px; padding: 3px 4px;
+  width: auto;
+}
+
+.chip-tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: #E8101A18; color: #c0000e; border: 1px solid #E8101A55;
+  border-radius: 20px; padding: 2px 8px; font-size: 12px; font-weight: 600;
+}
+.chip-tag button {
+  background: none; border: none; cursor: pointer; color: #c0000e;
+  font-size: 14px; line-height: 1; padding: 0 0 0 2px;
+}
+
+/* ── MEMBER ROWS ──────────────────────────────────────────── */
+
+.member-row {
+  display: flex; gap: 8px; margin-bottom: 8px; align-items: center;
+}
+.member-row .m-name { flex: 1; }
+.member-row .m-li   { flex: 1.5; }
+.rm-btn {
+  background: #f3f3f3; border: 2px solid #ddd; border-radius: 5px;
+  width: 34px; height: 34px; cursor: pointer; font-size: 18px; color: #888;
+  flex-shrink: 0; transition: background 0.12s;
+}
+.rm-btn:hover { background: #fdd; border-color: #E8101A; color: #E8101A; }
+
+.secondary-btn {
+  margin-top: 4px;
+  background: #f3f3f3; border: 2px solid #ddd; border-radius: 5px;
+  padding: 6px 14px; font-size: 13px; font-weight: 600; cursor: pointer;
+  color: #444; transition: border-color 0.12s, color 0.12s;
+}
+.secondary-btn:hover { border-color: #E8101A; color: #E8101A; }
+
+/* ── DROP ZONE ────────────────────────────────────────────── */
+
+.drop-zone {
+  border: 2px dashed #ccc; border-radius: 8px;
+  padding: 28px; text-align: center; cursor: pointer;
+  background: #fafafa; position: relative;
+  transition: border-color 0.15s, background 0.15s;
+  overflow: hidden;
+}
+.drop-zone:hover, .drop-zone.drag-over {
+  border-color: #E8101A; background: #fff5f5;
+}
+.drop-input {
+  position: absolute; inset: 0; opacity: 0; cursor: pointer;
+  width: 100% !important; height: 100%;
+}
+.drop-label { pointer-events: none; }
+#drop-icon  { display: block; font-size: 36px; margin-bottom: 8px; }
+#drop-text  { font-size: 14px; color: #555; }
+#drop-text u { color: #E8101A; }
+
+#image-preview {
+  max-width: 100%; max-height: 200px;
+  border-radius: 6px; display: block; margin: 0 auto;
+  object-fit: contain;
+}
+
+/* ── FEEDBACK ─────────────────────────────────────────────── */
+
+.error-box {
+  background: #fff0f0; border: 2px solid #E8101A;
+  border-radius: 6px; padding: 10px 14px;
+  color: #c0000e; font-size: 13px; margin-bottom: 16px;
+}
+
+/* ── SUBMIT BUTTON ────────────────────────────────────────── */
+
+.submit-primary {
+  display: block; width: 100%;
+  background: #E8101A; color: #fff;
+  border: none; border-radius: 6px;
+  padding: 13px; font-size: 16px; font-weight: 700;
+  cursor: pointer; text-align: center;
+  transition: background 0.15s, transform 0.1s;
+  box-shadow: 0 3px 10px rgba(232,16,26,0.35);
+}
+.submit-primary:hover:not(:disabled)  { background: #c0000e; }
+.submit-primary:active:not(:disabled) { transform: scale(0.98); }
+.submit-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* ── SUCCESS ──────────────────────────────────────────────── */
+
+#success-box {
+  text-align: center; padding: 60px 28px;
+}
+#success-icon { font-size: 72px; margin-bottom: 16px; }
+#success-box h2 { font-size: 28px; margin-bottom: 8px; }
+#success-box p  { color: #555; }
+
+/* ── MEMBER LINKS (panel) ─────────────────────────────────── */
+.member-link {
+  color: #0077b5; text-decoration: none; font-weight: 600;
+}
+.member-link:hover { text-decoration: underline; }
+
+@media (max-width: 520px) {
+  .field-half { width: 100%; }
+  .field-half + .field-half { margin-left: 0; }
+  .member-row { flex-wrap: wrap; }
+  .member-row .m-li { flex: 1 1 100%; }
+}

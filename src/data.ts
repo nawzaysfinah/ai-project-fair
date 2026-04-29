@@ -1,4 +1,39 @@
-import type { Domain, Project } from './types';
+import type { Domain, Project, Member } from './types';
+import { supabase } from './supabase';
+
+// ── SUPABASE FETCH ────────────────────────────────────────────
+
+export async function fetchProjects(): Promise<Project[]> {
+  if (!supabase) return STATIC_PROJECTS;
+
+  const { data, error } = await supabase
+    .from('projects')
+    .select('*')
+    .order('created_at', { ascending: true });
+
+  if (error || !data || data.length === 0) return STATIC_PROJECTS;
+
+  return data.map((row: Record<string, unknown>, idx: number) => {
+    const members = (row['members'] as Member[] | null) ?? [];
+    const student = members.length
+      ? members.map((m: Member) => m.name).join(', ')
+      : 'Unknown';
+    return {
+      id:        typeof row['id'] === 'number' ? row['id'] : idx + 1000,
+      name:      String(row['name'] ?? ''),
+      student,
+      domain:    String(row['domain'] ?? 'social'),
+      tech:      (row['tech'] as string[]) ?? [],
+      tags:      (row['tags'] as string[]) ?? [],
+      short:     String(row['short'] ?? ''),
+      full:      String(row['full'] ?? ''),
+      emoji:     String(row['emoji'] ?? '🚀'),
+      link:      String(row['link'] ?? '#'),
+      image_url: row['image_url'] ? String(row['image_url']) : undefined,
+      members,
+    } satisfies Project;
+  });
+}
 
 export const DOMAINS: Domain[] = [
   { id: 'ai-ml',     name: 'AI & Machine Learning', color: '#4A90D9', hex: 0x4A90D9, icon: '🤖', pos: { x: -34, z: -34 } },
@@ -19,7 +54,7 @@ export const TECH_COLORS: Record<string, string> = {
   'WebXR': '#00D4AA', 'MongoDB': '#47A248', 'PostgreSQL': '#336791',
 };
 
-export const PROJECTS: Project[] = [
+export const STATIC_PROJECTS: Project[] = [
   // AI & ML
   { id: 1,  name: 'MediScan AI',   student: 'Aisha Patel',     domain: 'ai-ml',
     tech: ['Python', 'TensorFlow', 'Computer Vision'],

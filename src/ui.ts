@@ -2,7 +2,7 @@ import { Raycaster, Vector2, Vector3 } from 'three';
 import { camera, renderer } from './scene';
 import { player, camYaw, setCamYaw, setTourActive, isTourActive, dragMoved } from './player';
 import { boothMeshes, byDomain, getBoothWorldPos } from './world';
-import { DOMAINS, PROJECTS, TECH_COLORS } from './data';
+import { DOMAINS, TECH_COLORS } from './data';
 import type { Project, Domain, BoothMeta } from './types';
 
 // ── RAYCASTING ────────────────────────────────────────────────
@@ -10,6 +10,7 @@ import type { Project, Domain, BoothMeta } from './types';
 const raycaster = new Raycaster();
 const mouse = new Vector2(-999, -999);
 let hoveredProj: Project | null = null;
+let allProjects: Project[] = [];
 
 window.addEventListener('mousemove', e => {
   mouse.x =  (e.clientX / window.innerWidth)  * 2 - 1;
@@ -69,11 +70,26 @@ export function openPanel(p: Project, d: Domain): void {
   Object.assign(badge.style, { background: '#E8101A', color: '#fff', border: 'none' });
 
   document.getElementById('panel-title')!.textContent = p.name;
-  document.getElementById('panel-student')!.textContent = '👤 ' + p.student;
 
   const hero = document.getElementById('panel-hero')!;
-  hero.textContent = p.emoji;
-  hero.style.background = `linear-gradient(160deg,${d.color}55,#f5f5f5)`;
+  if (p.image_url) {
+    hero.innerHTML = `<img src="${p.image_url}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;border-radius:4px">`;
+  } else {
+    hero.textContent = p.emoji;
+  }
+  hero.style.background = p.image_url ? 'none' : `linear-gradient(160deg,${d.color}55,#f5f5f5)`;
+
+  // Members with LinkedIn links, fallback to plain student name
+  const memberEl = document.getElementById('panel-student')!;
+  if (p.members && p.members.length > 0) {
+    memberEl.innerHTML = '👤 ' + p.members.map(m =>
+      m.linkedin
+        ? `<a href="${m.linkedin}" target="_blank" rel="noopener" class="member-link">${m.name}</a>`
+        : m.name
+    ).join(', ');
+  } else {
+    memberEl.textContent = '👤 ' + p.student;
+  }
 
   document.getElementById('panel-desc')!.textContent = p.full;
   document.getElementById('panel-tech')!.innerHTML = p.tech
@@ -98,13 +114,14 @@ document.getElementById('panel-close')!.addEventListener('click', () => {
 
 // ── LEGEND ────────────────────────────────────────────────────
 
-export function initLegend(): void {
+export function initLegend(projects: Project[]): void {
+  allProjects = projects;
   const el = document.getElementById('legend')!;
   el.innerHTML = '<h4>Domains</h4>' + DOMAINS.map(d => `
     <div class="leg-item" data-id="${d.id}">
       <div class="leg-dot" style="background:${d.color}"></div>
       <span>${d.icon} ${d.name}</span>
-      <span class="leg-count">${byDomain[d.id].length}</span>
+      <span class="leg-count">${byDomain[d.id]?.length ?? 0}</span>
     </div>`).join('');
 
   el.querySelectorAll<HTMLElement>('.leg-item').forEach(item => {
@@ -176,7 +193,8 @@ export function updateNameTag(): void {
 
 // ── SEARCH ────────────────────────────────────────────────────
 
-export function initSearch(): void {
+export function initSearch(projects: Project[]): void {
+  allProjects = projects;
   const sInput = document.getElementById('search-input') as HTMLInputElement;
   const sRes   = document.getElementById('search-results')!;
 
@@ -185,7 +203,7 @@ export function initSearch(): void {
   sInput.addEventListener('input', () => {
     const q = sInput.value.toLowerCase().trim();
     if (!q) { sRes.style.display = 'none'; return; }
-    const matches = PROJECTS.filter(p =>
+    const matches = allProjects.filter(p =>
       [p.name, p.student, p.short, ...p.tech, ...p.tags, p.domain].some(v => v.toLowerCase().includes(q))
     ).slice(0, 7);
 
@@ -201,7 +219,7 @@ export function initSearch(): void {
 
     sRes.querySelectorAll<HTMLElement>('.s-item[data-id]').forEach(item => {
       item.addEventListener('click', () => {
-        const proj = PROJECTS.find(p => p.id === Number(item.dataset['id']))!;
+        const proj = allProjects.find(p => p.id === Number(item.dataset['id']))!;
         const dom  = DOMAINS.find(d => d.id === proj.domain)!;
         const wp   = getBoothWorldPos(proj);
         if (wp) { player.position.set(wp.x, 0, wp.z + 7); setCamYaw(Math.PI); }
@@ -229,18 +247,21 @@ interface Waypoint { pos: Vector3; label: string; proj: Project | null; dom?: Do
 const SPEED_TOUR = 0.13 * 2.8;
 const TOUR_DWELL = 3.8;
 
-const tourWaypoints: Waypoint[] = [
-  { pos: new Vector3(0, 0, 10), label: 'Welcome to the Student Project Fair! 🎓', proj: null },
-  ...PROJECTS.map(p => {
-    const d  = DOMAINS.find(x => x.id === p.domain)!;
-    const wp = getBoothWorldPos(p);
-    const pos = wp ? new Vector3(wp.x, 0, wp.z + 7) : new Vector3(d.pos.x, 0, d.pos.z + 7);
-    return { pos, label: `${p.emoji} ${p.name} — ${p.student}`, proj: p, dom: d };
-  }),
-  { pos: new Vector3(0, 0, 10), label: 'Tour complete — explore freely! 🎉', proj: null },
-];
-
+let tourWaypoints: Waypoint[] = [];
 let tourIdx = 0, tourTimer = 0, tourShown = false;
+
+function buildTourWaypoints(): Waypoint[] {
+  return [
+    { pos: new Vector3(0, 0, 10), label: 'Welcome to the Student Project Fair! 🎓', proj: null },
+    ...allProjects.map(p => {
+      const d  = DOMAINS.find(x => x.id === p.domain)!;
+      const wp = getBoothWorldPos(p);
+      const pos = wp ? new Vector3(wp.x, 0, wp.z + 7) : new Vector3(d.pos.x, 0, d.pos.z + 7);
+      return { pos, label: `${p.emoji} ${p.name} — ${p.student}`, proj: p, dom: d };
+    }),
+    { pos: new Vector3(0, 0, 10), label: 'Tour complete — explore freely! 🎉', proj: null },
+  ];
+}
 
 function advanceTour(): void {
   if (tourIdx >= tourWaypoints.length) { stopTour(); return; }
@@ -277,6 +298,7 @@ export function updateTour(dt: number): void {
 }
 
 export function startTour(): void {
+  tourWaypoints = buildTourWaypoints();
   setTourActive(true); tourIdx = 0; tourTimer = 0; tourShown = false;
   document.getElementById('tour-btn')!.textContent = '⏹ Stop Tour';
   document.getElementById('tour-btn')!.classList.add('active');

@@ -6,9 +6,8 @@ import {
   isMoving, wasJustLanded, player,
 } from './player';
 import { checkHover, drawMinimap, updateTour, updateNameTag, initLegend, initSearch } from './ui';
-
-initLegend();
-initSearch();
+import { buildWorld } from './world';
+import { fetchProjects } from './data';
 
 if (/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent)) {
   (document.getElementById('mobile-notice') as HTMLElement).style.display = 'block';
@@ -91,4 +90,12 @@ function animate(): void {
   renderer.render(scene, camera);
 }
 
-animate();
+async function init(): Promise<void> {
+  const projects = await fetchProjects();
+  buildWorld(projects);
+  initLegend(projects);
+  initSearch(projects);
+  animate();
+}
+
+init();

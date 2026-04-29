@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎓 Student Project Fair</title>
+  <link rel="stylesheet" href="/src/style.css">
+</head>
+<body>
+
+<div id="loading">
+  <h1>🎓 Project Fair</h1>
+  <p>Loading the campus…</p>
+  <div class="loading-bar"><div class="loading-fill"></div></div>
+</div>
+
+<div id="mobile-notice">📱 Best on desktop — WASD to walk, Space to jump, drag to look</div>
+
+<div id="topbar">
+  <div id="search-wrap">
+    <input id="search-input" type="text" placeholder="🔍  Search projects, tech, students…">
+    <div id="search-results"></div>
+  </div>
+  <button id="tour-btn">▶ Guided Tour</button>
+</div>
+
+<div id="legend"><h4>Domains</h4></div>
+
+<canvas id="minimap" width="160" height="160"></canvas>
+
+<div id="hint">WASD · move &nbsp;|&nbsp; Space · jump &nbsp;|&nbsp; Drag · camera &nbsp;|&nbsp; Click · open project</div>
+
+<div id="tour-bar">📍 <span id="tour-text">Touring…</span></div>
+
+<!-- Floating name tag above player -->
+<div id="nametag">Player</div>
+
+<!-- Health bar -->
+<div id="health-wrap">
+  <span id="health-icon">❤️</span>
+  <div id="health-bar-bg"><div id="health-bar"></div></div>
+  <span id="health-label">100</span>
+</div>
+
+<div id="preview">
+  <div class="prev-img" id="prev-img"></div>
+  <h3 id="prev-name"></h3>
+  <div class="prev-student" id="prev-student"></div>
+  <div class="prev-desc" id="prev-desc"></div>
+  <div class="prev-tags" id="prev-tags"></div>
+  <div class="prev-cta">Click to explore →</div>
+</div>
+
+<div id="panel">
+  <div id="panel-inner">
+    <div id="panel-top">
+      <button id="panel-close">✕</button>
+      <div id="panel-badge"></div>
+      <div id="panel-title"></div>
+      <div id="panel-student"></div>
+    </div>
+    <div class="panel-hero" id="panel-hero"></div>
+    <div id="panel-body">
+      <div class="sec"><div class="sec-label">About this project</div><p id="panel-desc"></p></div>
+      <div class="sec"><div class="sec-label">Technology</div><div class="chips" id="panel-tech"></div></div>
+      <div class="sec"><div class="sec-label">Tags</div><div class="chips" id="panel-tags"></div></div>
+      <div class="sec" id="panel-link-sec">
+        <div class="sec-label">Project link</div>
+        <a id="panel-link" href="#" target="_blank" rel="noopener">View Project →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="/src/main.ts"></script>
+</body>
+</html>

@@ -1,73 +1,87 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&family=Inter:wght@400;500;600&display=swap');
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 body {
-  font-family: 'Segoe UI', Arial, sans-serif;
-  background: #87CEEB;
+  font-family: 'Nunito', 'Inter', sans-serif;
+  background: #0F0F0F;
+  background-image: radial-gradient(#1e1e2e 1px, transparent 1px);
+  background-size: 24px 24px;
   min-height: 100vh;
-  color: #111;
+  color: #F2F2F2;
 }
 
-/* ── TOP BAR ──────────────────────────────────────────────── */
+/* ── TOP BAR ──────────────────────────────────────────── */
 
 #topbar-submit {
   position: sticky; top: 0; z-index: 100;
   display: flex; align-items: center; gap: 16px;
-  background: #E8101A;
+  background: #1A1A2E;
   padding: 0 20px;
-  height: 48px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  height: 52px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.5);
+  border-bottom: 3px solid #E8252A;
 }
 
 .back-btn {
-  color: #fff; text-decoration: none; font-weight: 700; font-size: 14px;
-  padding: 4px 12px; border-radius: 4px; border: 2px solid rgba(255,255,255,0.4);
-  transition: background 0.15s;
+  color: #F2F2F2; text-decoration: none; font-weight: 800; font-size: 14px;
+  padding: 6px 14px; border-radius: 8px;
+  border: 1.5px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.06);
+  transition: all 0.15s; font-family: 'Nunito', sans-serif;
 }
-.back-btn:hover { background: rgba(255,255,255,0.18); }
+.back-btn:hover { background: rgba(0,162,255,0.18); border-color: #00A2FF; color: #00A2FF; }
 
 .topbar-title {
-  color: #fff; font-weight: 700; font-size: 16px; margin-left: auto;
+  color: #F2F2F2; font-weight: 900; font-size: 17px; margin-left: auto;
+  font-family: 'Fredoka One', 'Nunito', sans-serif; letter-spacing: 0.02em;
 }
 
-/* ── LAYOUT ───────────────────────────────────────────────── */
+/* ── LAYOUT ───────────────────────────────────────────── */
 
 #submit-wrap {
   display: flex; justify-content: center;
   padding: 40px 16px 80px;
+  max-width: 1200px; margin: 0 auto;
 }
 
 #submit-card {
-  background: #fff;
-  border-radius: 8px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  background: #1E1E2E;
+  border-radius: 12px;
+  box-shadow: 0 12px 48px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.06);
   width: 100%; max-width: 680px;
   overflow: hidden;
+  border: 1.5px solid #2A2A3A;
 }
 
-/* ── HEADER ───────────────────────────────────────────────── */
+/* ── HEADER ───────────────────────────────────────────── */
 
 #submit-header {
   padding: 0 0 28px;
 }
 
 #submit-red-bar {
-  background: #E8101A;
-  color: #fff; font-weight: 700; font-size: 14px;
-  letter-spacing: 0.06em;
-  padding: 10px 28px;
+  background: #E8252A;
+  border-bottom: 3px solid #A01A1E;
+  color: #fff; font-weight: 900; font-size: 13px;
+  letter-spacing: 0.1em;
+  padding: 11px 28px;
+  font-family: 'Nunito', sans-serif;
 }
 
 #submit-header h1 {
-  padding: 20px 28px 4px;
-  font-size: 26px;
+  padding: 22px 28px 6px;
+  font-size: 26px; color: #F2F2F2;
+  font-family: 'Fredoka One', 'Nunito', sans-serif;
+  font-weight: 400; letter-spacing: 0.02em;
 }
 
 #submit-header p {
   padding: 0 28px;
-  color: #555; font-size: 14px;
+  color: #AAAAAA; font-size: 14px; font-weight: 600;
 }
 
-/* ── FORM ─────────────────────────────────────────────────── */
+/* ── FORM ─────────────────────────────────────────────── */
 
 #submit-form { padding: 0 28px 32px; }
 
@@ -81,38 +95,49 @@ body {
 .field-half + .field-half { margin-left: 16px; }
 
 label {
-  display: block; font-weight: 600; font-size: 13px;
-  margin-bottom: 6px; color: #222;
+  display: block; font-weight: 800; font-size: 12px;
+  margin-bottom: 7px; color: #AAAAAA;
+  text-transform: uppercase; letter-spacing: 0.08em;
+  font-family: 'Nunito', sans-serif;
+  border-left: 4px solid #00A2FF; padding-left: 8px;
 }
 
-.req { color: #E8101A; }
+.req { color: #E8252A; }
 
 input[type=text], input[type=url], select, textarea {
-  width: 100%; border: 2px solid #ddd; border-radius: 5px;
-  padding: 9px 12px; font-size: 14px; font-family: inherit;
-  transition: border-color 0.15s;
-  background: #fafafa;
+  width: 100%; border: 1.5px solid #3A3A3A; border-radius: 8px;
+  padding: 10px 14px; font-size: 14px; font-family: 'Nunito', sans-serif;
+  font-weight: 600;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  background: #252525; color: #F2F2F2;
 }
 input[type=text]:focus, input[type=url]:focus, select:focus, textarea:focus {
-  outline: none; border-color: #E8101A; background: #fff;
+  outline: none; border-color: #00A2FF;
+  box-shadow: 0 0 0 3px rgba(0,162,255,0.15);
+  background: #2A2A3A;
 }
+input[type=text]::placeholder, input[type=url]::placeholder, textarea::placeholder {
+  color: #555; font-weight: 500;
+}
+select option { background: #252525; color: #F2F2F2; }
 
 textarea { resize: vertical; }
 
 .hint {
-  display: block; font-size: 11px; color: #888; margin-top: 4px;
+  display: block; font-size: 11px; color: #666; margin-top: 5px;
+  font-weight: 600;
 }
 
-/* ── CHIP INPUTS ──────────────────────────────────────────── */
+/* ── CHIP INPUTS ──────────────────────────────────────── */
 
 #tech-input-wrap, #tag-input-wrap {
-  border: 2px solid #ddd; border-radius: 5px;
-  padding: 6px 8px; background: #fafafa;
-  display: flex; flex-wrap: wrap; gap: 5px; align-items: center;
+  border: 1.5px solid #3A3A3A; border-radius: 8px;
+  padding: 8px 10px; background: #252525;
+  display: flex; flex-wrap: wrap; gap: 6px; align-items: center;
   cursor: text;
 }
 #tech-input-wrap:focus-within, #tag-input-wrap:focus-within {
-  border-color: #E8101A; background: #fff;
+  border-color: #00A2FF; box-shadow: 0 0 0 3px rgba(0,162,255,0.15);
 }
 
 #tech-chips, #tag-chips {
@@ -121,22 +146,27 @@ textarea { resize: vertical; }
 
 #tech-input, #tag-input {
   border: none; outline: none; background: transparent;
-  font-size: 14px; font-family: inherit;
+  font-size: 14px; font-family: 'Nunito', sans-serif; font-weight: 600;
   flex: 1; min-width: 140px; padding: 3px 4px;
-  width: auto;
+  width: auto; color: #F2F2F2;
 }
+#tech-input::placeholder, #tag-input::placeholder { color: #555; }
 
 .chip-tag {
   display: inline-flex; align-items: center; gap: 4px;
-  background: #E8101A18; color: #c0000e; border: 1px solid #E8101A55;
-  border-radius: 20px; padding: 2px 8px; font-size: 12px; font-weight: 600;
+  background: rgba(0,162,255,0.15); color: #00A2FF;
+  border: 1.5px solid rgba(0,162,255,0.4);
+  border-radius: 99px; padding: 3px 10px; font-size: 12px; font-weight: 800;
+  font-family: 'Nunito', sans-serif;
 }
 .chip-tag button {
-  background: none; border: none; cursor: pointer; color: #c0000e;
+  background: none; border: none; cursor: pointer; color: #00A2FF;
   font-size: 14px; line-height: 1; padding: 0 0 0 2px;
+  transition: color 0.12s;
 }
+.chip-tag button:hover { color: #E8252A; }
 
-/* ── MEMBER ROWS ──────────────────────────────────────────── */
+/* ── MEMBER ROWS ──────────────────────────────────────── */
 
 .member-row {
   display: flex; gap: 8px; margin-bottom: 8px; align-items: center;
@@ -144,31 +174,36 @@ textarea { resize: vertical; }
 .member-row .m-name { flex: 1; }
 .member-row .m-li   { flex: 1.5; }
 .rm-btn {
-  background: #f3f3f3; border: 2px solid #ddd; border-radius: 5px;
-  width: 34px; height: 34px; cursor: pointer; font-size: 18px; color: #888;
-  flex-shrink: 0; transition: background 0.12s;
+  background: #252525; border: 1.5px solid #3A3A3A; border-radius: 6px;
+  width: 34px; height: 34px; cursor: pointer; font-size: 16px; color: #666;
+  flex-shrink: 0; transition: all 0.12s;
 }
-.rm-btn:hover { background: #fdd; border-color: #E8101A; color: #E8101A; }
+.rm-btn:hover { background: rgba(232,37,42,0.15); border-color: #E8252A; color: #E8252A; }
 
 .secondary-btn {
   margin-top: 4px;
-  background: #f3f3f3; border: 2px solid #ddd; border-radius: 5px;
-  padding: 6px 14px; font-size: 13px; font-weight: 600; cursor: pointer;
-  color: #444; transition: border-color 0.12s, color 0.12s;
+  background: #252525; border: 1.5px solid #3A3A3A; border-radius: 8px;
+  padding: 7px 16px; font-size: 13px; font-weight: 800; cursor: pointer;
+  color: #AAAAAA; transition: all 0.12s;
+  font-family: 'Nunito', sans-serif;
+  border-bottom: 3px solid #222;
 }
-.secondary-btn:hover { border-color: #E8101A; color: #E8101A; }
+.secondary-btn:hover { border-color: #00A2FF; color: #00A2FF; }
+.secondary-btn:active { transform: translateY(1px); border-bottom-width: 1px; }
 
-/* ── DROP ZONE ────────────────────────────────────────────── */
+/* ── DROP ZONE ────────────────────────────────────────── */
 
 .drop-zone {
-  border: 2px dashed #ccc; border-radius: 8px;
+  border: 2px dashed #3A3A3A; border-radius: 10px;
   padding: 28px; text-align: center; cursor: pointer;
-  background: #fafafa; position: relative;
+  background: #252525; position: relative;
   transition: border-color 0.15s, background 0.15s;
   overflow: hidden;
 }
 .drop-zone:hover, .drop-zone.drag-over {
-  border-color: #E8101A; background: #fff5f5;
+  border-color: #00A2FF;
+  background: rgba(0,162,255,0.06);
+  box-shadow: 0 0 12px rgba(0,162,255,0.2);
 }
 .drop-input {
   position: absolute; inset: 0; opacity: 0; cursor: pointer;
@@ -176,50 +211,57 @@ textarea { resize: vertical; }
 }
 .drop-label { pointer-events: none; }
 #drop-icon  { display: block; font-size: 36px; margin-bottom: 8px; }
-#drop-text  { font-size: 14px; color: #555; }
-#drop-text u { color: #E8101A; }
+#drop-text  { font-size: 14px; color: #AAAAAA; font-weight: 600; }
+#drop-text u { color: #00A2FF; }
 
 #image-preview {
   max-width: 100%; max-height: 200px;
-  border-radius: 6px; display: block; margin: 0 auto;
+  border-radius: 8px; display: block; margin: 0 auto;
   object-fit: contain;
 }
 
-/* ── FEEDBACK ─────────────────────────────────────────────── */
+/* ── FEEDBACK ─────────────────────────────────────────── */
 
 .error-box {
-  background: #fff0f0; border: 2px solid #E8101A;
-  border-radius: 6px; padding: 10px 14px;
-  color: #c0000e; font-size: 13px; margin-bottom: 16px;
+  background: rgba(232,37,42,0.12); border: 1.5px solid rgba(232,37,42,0.4);
+  border-radius: 8px; padding: 10px 14px;
+  color: #FF6B6B; font-size: 13px; margin-bottom: 16px;
+  font-weight: 700;
 }
 
-/* ── SUBMIT BUTTON ────────────────────────────────────────── */
+/* ── SUBMIT BUTTON ────────────────────────────────────── */
 
 .submit-primary {
   display: block; width: 100%;
-  background: #E8101A; color: #fff;
-  border: none; border-radius: 6px;
-  padding: 13px; font-size: 16px; font-weight: 700;
+  background: #00B06F; color: #fff;
+  border: none; border-radius: 8px;
+  border-bottom: 4px solid #007A4D;
+  padding: 13px; font-size: 16px; font-weight: 900;
   cursor: pointer; text-align: center;
-  transition: background 0.15s, transform 0.1s;
-  box-shadow: 0 3px 10px rgba(232,16,26,0.35);
+  font-family: 'Nunito', sans-serif; letter-spacing: 0.02em;
+  transition: transform 0.1s;
 }
-.submit-primary:hover:not(:disabled)  { background: #c0000e; }
-.submit-primary:active:not(:disabled) { transform: scale(0.98); }
-.submit-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+.submit-primary:hover:not(:disabled)  { background: #00C97E; transform: translateY(-1px); }
+.submit-primary:active:not(:disabled) { transform: translateY(2px); border-bottom-width: 1px; }
+.submit-primary:disabled { opacity: 0.5; cursor: not-allowed; }
 
-/* ── SUCCESS ──────────────────────────────────────────────── */
+/* ── SUCCESS ──────────────────────────────────────────── */
 
 #success-box {
   text-align: center; padding: 60px 28px;
+  background-image: radial-gradient(#2a2a4a 1px, transparent 1px);
+  background-size: 20px 20px;
 }
 #success-icon { font-size: 72px; margin-bottom: 16px; }
-#success-box h2 { font-size: 28px; margin-bottom: 8px; }
-#success-box p  { color: #555; }
+#success-box h2 {
+  font-size: 28px; margin-bottom: 8px; color: #F2F2F2;
+  font-family: 'Fredoka One', 'Nunito', sans-serif; font-weight: 400;
+}
+#success-box p  { color: #AAAAAA; font-size: 15px; }
 
-/* ── MEMBER LINKS (panel) ─────────────────────────────────── */
+/* ── MEMBER LINKS ─────────────────────────────────────── */
 .member-link {
-  color: #0077b5; text-decoration: none; font-weight: 600;
+  color: #00A2FF; text-decoration: none; font-weight: 800;
 }
 .member-link:hover { text-decoration: underline; }
 
@@ -228,4 +270,7 @@ textarea { resize: vertical; }
   .field-half + .field-half { margin-left: 0; }
   .member-row { flex-wrap: wrap; }
   .member-row .m-li { flex: 1 1 100%; }
+  #submit-form { padding: 0 16px 24px; }
+  #submit-header h1 { padding: 18px 16px 6px; }
+  #submit-header p, #submit-red-bar { padding-left: 16px; }
 }

@@ -5,7 +5,7 @@ import {
   leftArmGroup, rightArmGroup, leftLegGroup, rightLegGroup,
   isMoving, wasJustLanded, player,
 } from './player';
-import { checkHover, drawMinimap, updateTour, updateNameTag, initLegend, initSearch } from './ui';
+import { checkHover, drawMinimap, updateTour, updateNameTag, initLegend, initSearch, initAuth } from './ui';
 import { buildWorld } from './world';
 import { fetchProjects } from './data';
 
@@ -95,6 +95,7 @@ async function init(): Promise<void> {
   buildWorld(projects);
   initLegend(projects);
   initSearch(projects);
+  await initAuth();
   animate();
 }
 

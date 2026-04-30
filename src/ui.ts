@@ -3,7 +3,9 @@ import { camera, renderer } from './scene';
 import { player, camYaw, setCamYaw, setTourActive, isTourActive, dragMoved } from './player';
 import { boothMeshes, byDomain, getBoothWorldPos } from './world';
 import { getDomain, TECH_COLORS } from './data';
+import { getUser, checkIsAdmin, sendMagicLink, signOut, onAuthChange } from './auth';
 import type { Project, Domain, BoothMeta } from './types';
+import type { AuthUser } from './auth';
 
 // ── RAYCASTING ────────────────────────────────────────────────
 
@@ -11,6 +13,9 @@ const raycaster = new Raycaster();
 const mouse = new Vector2(-999, -999);
 let hoveredProj: Project | null = null;
 let allProjects: Project[] = [];
+let currentUser: AuthUser | null = null;
+let userIsAdmin = false;
+let openProject: Project | null = null;
 
 window.addEventListener('mousemove', e => {
   mouse.x =  (e.clientX / window.innerWidth)  * 2 - 1;
@@ -104,6 +109,15 @@ export function openPanel(p: Project, d: Domain): void {
   if (p.link && p.link !== '#') { lsec.style.display = 'block'; lnk.href = p.link; }
   else lsec.style.display = 'none';
 
+  openProject = p;
+  const canEdit = currentUser && (userIsAdmin || currentUser.id === p.user_id);
+  const actions = document.getElementById('panel-actions')!;
+  actions.style.display = canEdit ? 'flex' : 'none';
+  if (canEdit) {
+    (document.getElementById('panel-edit-btn') as HTMLAnchorElement).href =
+      `/submit.html?edit=${p.id}`;
+  }
+
   document.getElementById('panel')!.classList.add('open');
   hidePreview();
 }
@@ -111,6 +125,94 @@ export function openPanel(p: Project, d: Domain): void {
 document.getElementById('panel-close')!.addEventListener('click', () => {
   document.getElementById('panel')!.classList.remove('open');
 });
+
+document.getElementById('panel-delete-btn')!.addEventListener('click', async () => {
+  if (!openProject) return;
+  if (!confirm(`Delete "${openProject.name}"? This cannot be undone.`)) return;
+  const { supabase } = await import('./supabase');
+  if (!supabase) return;
+  const { error } = await supabase.from('projects').delete().eq('id', openProject.id);
+  if (error) { alert('Delete failed: ' + error.message); return; }
+  document.getElementById('panel')!.classList.remove('open');
+  allProjects = allProjects.filter(p => p.id !== openProject!.id);
+  openProject = null;
+  alert('Project deleted. Reload the page to see changes.');
+});
+
+// ── AUTH MODAL ────────────────────────────────────────────────
+
+export async function initAuth(): Promise<void> {
+  const authBtn   = document.getElementById('auth-btn')!;
+  const modal     = document.getElementById('auth-modal')!;
+  const modalClose = document.getElementById('auth-modal-close')!;
+  const sendBtn   = document.getElementById('auth-send-btn')!;
+  const signoutBtn = document.getElementById('auth-signout-btn')!;
+  const emailInput = document.getElementById('auth-email') as HTMLInputElement;
+  const errorEl   = document.getElementById('auth-error')!;
+
+  function setAuthView(user: AuthUser | null): void {
+    currentUser = user;
+    document.getElementById('auth-signed-out')!.style.display = user ? 'none' : 'block';
+    document.getElementById('auth-sent')!.style.display       = 'none';
+    document.getElementById('auth-signed-in')!.style.display  = user ? 'block' : 'none';
+    if (user) {
+      document.getElementById('auth-user-email')!.textContent = user.email ?? '';
+      authBtn.textContent = '👤 ' + (user.email?.split('@')[0] ?? 'Me');
+      authBtn.classList.add('signed-in');
+    } else {
+      authBtn.textContent = 'Sign In';
+      authBtn.classList.remove('signed-in');
+    }
+  }
+
+  // Check current session
+  const user = await getUser();
+  if (user) {
+    userIsAdmin = await checkIsAdmin(user.id);
+    setAuthView(user);
+  }
+
+  // Listen for auth changes (magic link return, sign-out)
+  onAuthChange(async u => {
+    if (u) userIsAdmin = await checkIsAdmin(u.id);
+    setAuthView(u);
+  });
+
+  authBtn.addEventListener('click', () => {
+    modal.style.display = 'flex';
+    document.getElementById('auth-signed-out')!.style.display = currentUser ? 'none' : 'block';
+    document.getElementById('auth-sent')!.style.display       = 'none';
+    document.getElementById('auth-signed-in')!.style.display  = currentUser ? 'block' : 'none';
+  });
+
+  modalClose.addEventListener('click', () => { modal.style.display = 'none'; });
+  modal.addEventListener('click', e => { if (e.target === modal) modal.style.display = 'none'; });
+
+  sendBtn.addEventListener('click', async () => {
+    const email = emailInput.value.trim();
+    if (!email) { errorEl.textContent = 'Enter your email.'; errorEl.style.display = 'block'; return; }
+    errorEl.style.display = 'none';
+    sendBtn.setAttribute('disabled', 'true');
+    sendBtn.textContent = 'Sending…';
+    try {
+      await sendMagicLink(email);
+      document.getElementById('auth-signed-out')!.style.display = 'none';
+      document.getElementById('auth-sent')!.style.display = 'block';
+      document.getElementById('auth-sent-email')!.textContent = email;
+    } catch (err) {
+      errorEl.textContent = (err as Error).message;
+      errorEl.style.display = 'block';
+    } finally {
+      sendBtn.removeAttribute('disabled');
+      sendBtn.textContent = 'Send Magic Link';
+    }
+  });
+
+  signoutBtn.addEventListener('click', async () => {
+    await signOut();
+    modal.style.display = 'none';
+  });
+}
 
 // ── LEGEND ────────────────────────────────────────────────────
 

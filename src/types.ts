@@ -26,6 +26,7 @@ export interface Project {
   image_url?: string;
   members?: Member[];
   thumbnail?: string;
+  user_id?: string;
 }
 
 export interface BoothMeta {

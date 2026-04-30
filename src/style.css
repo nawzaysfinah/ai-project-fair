@@ -232,6 +232,76 @@ canvas { display: block; }
 }
 #panel-link:hover { background: #c00d16; }
 
+/* ── PANEL ACTIONS ───────────────────────────────────── */
+#panel-actions {
+  display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap;
+}
+.action-btn {
+  padding: 7px 16px; border-radius: 5px; font-size: 0.82rem;
+  font-weight: 700; cursor: pointer; border: 2px solid; transition: all 0.15s;
+  text-decoration: none; display: inline-block;
+}
+.edit-btn  { border-color: #4A90D9; color: #4A90D9; background: #4A90D918; }
+.edit-btn:hover  { background: #4A90D9; color: #fff; }
+.delete-btn { border-color: #E8101A; color: #E8101A; background: #E8101A18; }
+.delete-btn:hover { background: #E8101A; color: #fff; }
+
+/* ── AUTH TOPBAR BUTTON ──────────────────────────────── */
+.auth-topbar-btn {
+  background: transparent; border: 2px solid rgba(255,255,255,0.55);
+  color: #fff; padding: 7px 14px; border-radius: 6px;
+  font-size: 0.82rem; font-weight: 700; cursor: pointer;
+  white-space: nowrap; transition: all 0.15s;
+}
+.auth-topbar-btn:hover { background: rgba(255,255,255,0.18); }
+.auth-topbar-btn.signed-in { border-color: rgba(255,255,255,0.9); }
+
+/* ── AUTH MODAL ──────────────────────────────────────── */
+#auth-modal {
+  position: fixed; inset: 0; z-index: 9000;
+  background: rgba(0,0,0,0.55);
+  display: flex; align-items: center; justify-content: center;
+}
+#auth-modal-inner {
+  background: #fff; border-radius: 8px; overflow: hidden;
+  width: 360px; max-width: calc(100vw - 32px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+  position: relative;
+}
+#auth-modal-close {
+  position: absolute; top: 10px; right: 12px;
+  background: none; border: none; font-size: 18px; cursor: pointer;
+  color: #fff; font-weight: 700; line-height: 1; z-index: 1;
+}
+#auth-red-bar {
+  background: #E8101A; color: #fff;
+  font-weight: 700; font-size: 13px; letter-spacing: 0.06em;
+  padding: 10px 20px;
+}
+#auth-signed-out, #auth-sent, #auth-signed-in { padding: 24px 24px 28px; }
+#auth-signed-out h2, #auth-sent h2, #auth-signed-in h2 {
+  font-size: 20px; margin-bottom: 6px;
+}
+#auth-signed-out p, #auth-sent p, #auth-signed-in p {
+  color: #555; font-size: 13px; margin-bottom: 16px;
+}
+#auth-email {
+  width: 100%; border: 2px solid #ddd; border-radius: 5px;
+  padding: 9px 12px; font-size: 14px; margin-bottom: 10px;
+}
+#auth-email:focus { outline: none; border-color: #E8101A; }
+#auth-send-btn, #auth-signout-btn {
+  width: 100%; background: #E8101A; color: #fff; border: none;
+  border-radius: 6px; padding: 11px; font-size: 15px; font-weight: 700;
+  cursor: pointer; transition: background 0.15s;
+}
+#auth-send-btn:hover, #auth-signout-btn:hover { background: #c00d16; }
+#auth-signout-btn { background: #555; }
+#auth-signout-btn:hover { background: #333; }
+.auth-error { color: #c0000e; font-size: 13px; margin-top: 8px; }
+.auth-success-icon { font-size: 48px; margin-bottom: 12px; }
+#auth-user-email { word-break: break-all; }
+
 /* ── RESPONSIVE ──────────────────────────────────────── */
 @media (max-width: 768px) {
   #mobile-notice { display: block; }

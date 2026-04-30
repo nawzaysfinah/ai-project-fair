@@ -31,6 +31,7 @@ export async function fetchProjects(): Promise<Project[]> {
       link:      String(row['link'] ?? '#'),
       image_url: row['image_url'] ? String(row['image_url']) : undefined,
       members,
+      user_id: row['user_id'] ? String(row['user_id']) : undefined,
     } satisfies Project;
   });
 }

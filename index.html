@@ -90,6 +90,34 @@
 <!-- Teleport flash overlay -->
 <div id="teleport-flash"></div>
 
+<!-- About modal — triggered when player reaches center -->
+<div id="about-modal" style="display:none">
+  <div id="about-inner">
+    <button id="about-close">✕</button>
+    <div id="about-red-bar">🎓 AI PROJECT FAIR 2025</div>
+    <div id="about-body">
+      <div id="about-icon">🏛️</div>
+      <h2>Welcome to the Fair!</h2>
+      <p>This is an <strong>interactive 3D showcase</strong> of student AI projects — built as a virtual campus you can explore in real time.</p>
+      <ul>
+        <li>🚶 <strong>Walk around</strong> to discover project booths by domain</li>
+        <li>🖱️ <strong>Click a booth</strong> to read the full project details</li>
+        <li>🌀 <strong>Step on a glowing pad</strong> near the fountain to warp to any zone</li>
+        <li>⚔️ <strong>Head north</strong> to the combat zone and press <kbd>Q</kbd> to fight the guard</li>
+        <li>💃 <strong>Press E</strong> to open the emote wheel</li>
+        <li>➕ <strong>Submit your own project</strong> using the button above</li>
+      </ul>
+      <button id="about-enter-btn">Let's explore →</button>
+    </div>
+  </div>
+</div>
+
+<!-- Attack hint — shown when enemy is nearby -->
+<div id="attack-hint">
+  <kbd>Q</kbd>
+  <span>Attack</span>
+</div>
+
 <div id="tour-bar">📍 <span id="tour-text">Touring…</span></div>
 
 <!-- Floating name tag above player -->

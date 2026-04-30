@@ -5,7 +5,6 @@ import {
   leftArmGroup, rightArmGroup, leftLegGroup, rightLegGroup,
   isMoving, wasJustLanded, player,
   setCharacterColors, damagePlayer as _dmg,
-  playerHealth, camYaw,
 } from './player';
 import { checkHover, drawMinimap, updateTour, updateNameTag, initLegend, initSearch, initAuth } from './ui';
 import { buildWorld } from './world';
@@ -41,16 +40,15 @@ combatFloor.position.set(0, -0.08, -65);
 scene.add(combatFloor);
 
 // ── SHOOT INPUT ───────────────────────────────────────────────
+let shootCooldown = 0;
+
 window.addEventListener('keydown', e => {
-  if (e.code === 'KeyQ') {
-    const toEnemy = new Vector3().subVectors(enemyGroup.position, player.position);
-    const dist = toEnemy.length();
-    if (dist < 22) {
-      const fwd = new Vector3(-Math.sin(camYaw), 0, -Math.cos(camYaw));
-      if (toEnemy.normalize().dot(fwd) > 0.45) {
-        hitEnemy();
-        playShoot();
-      }
+  if (e.code === 'KeyQ' && shootCooldown <= 0) {
+    const dist = enemyGroup.position.distanceTo(player.position);
+    if (dist < 22 && enemyGroup.visible) {
+      hitEnemy();
+      playShoot();
+      shootCooldown = 0.5; // 2 shots per second max
     }
   }
   if (e.code === 'Space' && !e.repeat) playJump();
@@ -65,6 +63,8 @@ function animate(): void {
   const dt = Math.min(clock.getDelta(), 0.05);
   const t  = clock.getElapsedTime();
 
+  shootCooldown = Math.max(0, shootCooldown - dt);
+
   updatePlayer();
   updateTour(dt);
   updateCamera();
@@ -74,6 +74,18 @@ function animate(): void {
   animateClouds(dt);
   updateEnemy(dt);
   updateTeleport(dt);
+
+  // Center-circle about popup (trigger once per session)
+  const distCenter = Math.sqrt(player.position.x ** 2 + player.position.z ** 2);
+  if (distCenter < 6 && !sessionStorage.getItem('about_seen')) {
+    sessionStorage.setItem('about_seen', '1');
+    document.getElementById('about-modal')!.style.display = 'flex';
+  }
+
+  // Attack hint — show when enemy is close and alive
+  const distEnemy = enemyGroup.position.distanceTo(player.position);
+  const attackHint = document.getElementById('attack-hint')!;
+  attackHint.style.display = (distEnemy < 22 && enemyGroup.visible) ? 'flex' : 'none';
 
   // Sound: footstep + land
   if (isMoving()) playFootstep(t);
@@ -142,6 +154,11 @@ async function init(): Promise<void> {
   await initAuth();
 
   initEmotes(leftArmGroup, rightArmGroup, leftLegGroup, rightLegGroup);
+
+  // About modal close buttons
+  const closeAbout = () => { document.getElementById('about-modal')!.style.display = 'none'; };
+  document.getElementById('about-close')!.addEventListener('click', closeAbout);
+  document.getElementById('about-enter-btn')!.addEventListener('click', closeAbout);
 
   animate();
 }

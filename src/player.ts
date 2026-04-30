@@ -5,6 +5,7 @@ import {
   CanvasTexture, Vector3,
 } from 'three';
 import { scene, camera, renderer } from './scene';
+import type { CharSkin } from './charselect';
 
 // ── MATERIALS ────────────────────────────────────────────────
 const skinMat  = new MeshLambertMaterial({ color: 0xFFD700 });
@@ -12,21 +13,21 @@ const torsoMat = new MeshLambertMaterial({ color: 0x0066FF });
 const legMat   = new MeshLambertMaterial({ color: 0x1A1A2E });
 const hatMat   = new MeshLambertMaterial({ color: 0x888888 });
 
-function makeFaceTexture(): CanvasTexture {
+let _faceSkinHex = '#FFD700';
+let _faceCtx: CanvasRenderingContext2D;
+
+function makeFaceTexture(skinHex = '#FFD700'): CanvasTexture {
   const cv = document.createElement('canvas'); cv.width = 128; cv.height = 128;
   const cx = cv.getContext('2d')!;
-  cx.fillStyle = '#FFD700'; cx.fillRect(0, 0, 128, 128);
-  // Square eyes
+  _faceCtx = cx;
+  _faceSkinHex = skinHex;
+  cx.fillStyle = skinHex; cx.fillRect(0, 0, 128, 128);
   cx.fillStyle = '#000';
-  cx.fillRect(26, 36, 24, 24);
-  cx.fillRect(78, 36, 24, 24);
+  cx.fillRect(26, 36, 24, 24); cx.fillRect(78, 36, 24, 24);
   cx.fillStyle = '#fff';
-  cx.fillRect(30, 40, 13, 13);
-  cx.fillRect(82, 40, 13, 13);
+  cx.fillRect(30, 40, 13, 13); cx.fillRect(82, 40, 13, 13);
   cx.fillStyle = '#000';
-  cx.fillRect(35, 45, 6, 6);
-  cx.fillRect(87, 45, 6, 6);
-  // Smile
+  cx.fillRect(35, 45, 6, 6); cx.fillRect(87, 45, 6, 6);
   cx.strokeStyle = '#000'; cx.lineWidth = 5;
   cx.beginPath(); cx.arc(64, 82, 20, 0.15, Math.PI - 0.15); cx.stroke();
   return new CanvasTexture(cv);
@@ -86,6 +87,46 @@ export const rightLegGroup = new Group(); rightLegGroup.position.set(0.25, 1.1, 
 // Glow
 const playerLight = new PointLight(0xffffff, 0.6, 6);
 playerLight.position.y = 1.5; player.add(playerLight);
+
+// ── CHARACTER COLORS ──────────────────────────────────────────
+export function setCharacterColors(skin: CharSkin): void {
+  skinMat.color.setHex(skin.skin);
+  torsoMat.color.setHex(skin.torso);
+  legMat.color.setHex(skin.leg);
+  hatMat.color.setHex(skin.hat);
+  // Rebuild face with new skin color
+  const hex = '#' + skin.skin.toString(16).padStart(6, '0');
+  const newTex = makeFaceTexture(hex);
+  faceMat.map?.dispose();
+  faceMat.map = newTex;
+  faceMat.needsUpdate = true;
+}
+
+// ── HEALTH ────────────────────────────────────────────────────
+export let playerHealth = 100;
+let _damageFlash = 0;
+
+function updateHealthBar(): void {
+  const bar   = document.getElementById('health-bar');
+  const label = document.getElementById('health-label');
+  if (bar)   { bar.style.width = `${playerHealth}%`; bar.style.background = playerHealth > 50 ? '#00B06F' : playerHealth > 25 ? '#F39C12' : '#E8252A'; }
+  if (label) label.textContent = String(playerHealth);
+}
+
+export function damagePlayer(amount: number): void {
+  if (playerHealth <= 0) return;
+  playerHealth = Math.max(0, playerHealth - amount);
+  _damageFlash = 0.25;
+  updateHealthBar();
+  if (playerHealth <= 0) setTimeout(respawnPlayer, 2200);
+}
+
+export function respawnPlayer(): void {
+  playerHealth = 100;
+  player.position.set(0, 0, 12);
+  velocityY = 0;
+  updateHealthBar();
+}
 
 // ── PHYSICS ──────────────────────────────────────────────────
 const GRAVITY    = -0.022;

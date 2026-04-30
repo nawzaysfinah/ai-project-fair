@@ -8,6 +8,33 @@
 </head>
 <body>
 
+<!-- Character select (shown before game loads) -->
+<div id="charselect">
+  <div id="cs-inner">
+    <div id="cs-red-bar">CHOOSE YOUR CHARACTER</div>
+    <h2 id="cs-title">Who are you?</h2>
+    <p id="cs-sub">Pick your look before entering the fair</p>
+    <div id="cs-cards">
+      <div class="cs-card" data-idx="0">
+        <div class="cs-avatar" style="--skin:#FFD700;--torso:#0066FF;--leg:#1A1A2E"></div>
+        <div class="cs-name">Classic</div>
+        <div class="cs-desc">The original student</div>
+      </div>
+      <div class="cs-card" data-idx="1">
+        <div class="cs-avatar" style="--skin:#3A2222;--torso:#220022;--leg:#110011"></div>
+        <div class="cs-name">Dark Knight</div>
+        <div class="cs-desc">Shadow of the campus</div>
+      </div>
+      <div class="cs-card" data-idx="2">
+        <div class="cs-avatar" style="--skin:#DDFFFF;--torso:#DDEEFF;--leg:#224488"></div>
+        <div class="cs-name">Space Explorer</div>
+        <div class="cs-desc">From the future</div>
+      </div>
+    </div>
+    <button id="cs-enter-btn">Enter the Fair →</button>
+  </div>
+</div>
+
 <div id="loading">
   <h1>🎓 Project Fair</h1>
   <p>Loading the campus…</p>
@@ -55,7 +82,13 @@
 
 <canvas id="minimap" width="160" height="160"></canvas>
 
-<div id="hint">WASD · move &nbsp;|&nbsp; Space · jump &nbsp;|&nbsp; Drag · camera &nbsp;|&nbsp; Click · open project</div>
+<div id="hint">WASD · move &nbsp;|&nbsp; Space · jump &nbsp;|&nbsp; Q · shoot &nbsp;|&nbsp; E · emotes &nbsp;|&nbsp; Drag · camera</div>
+
+<!-- Emote wheel (E key) -->
+<div id="emote-wheel"></div>
+
+<!-- Teleport flash overlay -->
+<div id="teleport-flash"></div>
 
 <div id="tour-bar">📍 <span id="tour-text">Touring…</span></div>
 

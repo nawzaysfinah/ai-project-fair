@@ -422,6 +422,135 @@ canvas { display: block; }
 .auth-success-icon { font-size: 48px; margin-bottom: 12px; }
 #auth-user-email { word-break: break-all; color: #00A2FF; font-weight: 700; }
 
+/* ── CHARACTER SELECT ────────────────────────────────── */
+#charselect {
+  position: fixed; inset: 0; z-index: 10000;
+  background: #0F0F0F;
+  background-image: radial-gradient(#1e1e2e 1px, transparent 1px);
+  background-size: 24px 24px;
+  display: none; align-items: center; justify-content: center;
+}
+#cs-inner {
+  width: 100%; max-width: 700px; padding: 0 16px;
+  text-align: center;
+}
+#cs-red-bar {
+  background: #E8252A; color: #fff;
+  font-weight: 900; font-size: 11px; letter-spacing: 0.14em;
+  padding: 9px 20px; border-radius: 8px 8px 0 0;
+  font-family: 'Nunito', sans-serif;
+  border-bottom: 3px solid #A01A1E; display: inline-block;
+  margin-bottom: -3px;
+}
+#cs-title {
+  font-family: 'Fredoka One', 'Nunito', sans-serif;
+  font-size: 2.4rem; font-weight: 400; color: #F2F2F2;
+  margin: 20px 0 4px; letter-spacing: 0.02em;
+}
+#cs-sub { color: #AAAAAA; font-size: 0.88rem; font-weight: 600; margin-bottom: 32px; }
+#cs-cards {
+  display: flex; gap: 16px; justify-content: center; flex-wrap: wrap;
+  margin-bottom: 32px;
+}
+.cs-card {
+  background: #1E1E2E; border: 2px solid #3A3A3A;
+  border-radius: 12px; padding: 24px 20px;
+  cursor: pointer; width: 180px;
+  transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
+  position: relative;
+}
+.cs-card:hover { border-color: #00A2FF; transform: translateY(-4px); }
+.cs-card.selected {
+  border-color: #00B06F;
+  box-shadow: 0 0 0 3px rgba(0,176,111,0.25), 0 8px 24px rgba(0,0,0,0.4);
+}
+.cs-card.selected::after {
+  content: '✓'; position: absolute; top: 10px; right: 12px;
+  color: #00B06F; font-size: 1rem; font-weight: 900;
+}
+/* Mini character preview using CSS */
+.cs-avatar {
+  width: 60px; height: 80px; margin: 0 auto 14px; position: relative;
+}
+.cs-avatar::before {
+  /* Head */
+  content: '';
+  position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+  width: 28px; height: 28px;
+  background: var(--skin); border-radius: 3px;
+}
+.cs-avatar::after {
+  /* Torso */
+  content: '';
+  position: absolute; top: 30px; left: 50%; transform: translateX(-50%);
+  width: 34px; height: 28px;
+  background: var(--torso); border-radius: 2px;
+}
+.cs-name {
+  font-family: 'Fredoka One', 'Nunito', sans-serif;
+  font-size: 1.1rem; color: #F2F2F2; margin-bottom: 4px;
+}
+.cs-desc { font-size: 0.74rem; color: #AAAAAA; font-weight: 600; }
+#cs-enter-btn {
+  background: #00B06F; color: #fff; border: none;
+  padding: 14px 40px; border-radius: 10px; font-size: 1.05rem;
+  font-weight: 900; cursor: pointer; font-family: 'Nunito', sans-serif;
+  border-bottom: 5px solid #007A4D;
+  transition: transform 0.1s, background 0.15s;
+  letter-spacing: 0.03em;
+}
+#cs-enter-btn:hover  { background: #00C97E; transform: translateY(-2px); }
+#cs-enter-btn:active { transform: translateY(3px); border-bottom-width: 1px; }
+
+/* ── EMOTE WHEEL ─────────────────────────────────────── */
+#emote-wheel {
+  position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%);
+  width: 200px; height: 200px;
+  display: none; z-index: 200;
+  pointer-events: none;
+}
+#emote-wheel.open {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  pointer-events: all;
+}
+.emote-seg {
+  background: rgba(26,26,46,0.92); border: 2px solid #3A3A3A;
+  border-radius: 10px; cursor: pointer;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 4px; padding: 8px;
+  transition: border-color 0.12s, background 0.12s, transform 0.12s;
+  font-family: 'Nunito', sans-serif;
+  backdrop-filter: blur(8px);
+}
+.emote-seg:hover { border-color: #00A2FF; background: rgba(0,162,255,0.15); transform: scale(1.06); }
+.emote-icon  { font-size: 1.5rem; }
+.emote-label { font-size: 0.65rem; font-weight: 800; color: #AAAAAA; text-transform: uppercase; letter-spacing: 0.06em; }
+
+/* ── TELEPORT FLASH ──────────────────────────────────── */
+#teleport-flash {
+  position: fixed; inset: 0; z-index: 500;
+  background: #fff; opacity: 0; pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+/* ── ENEMY HP BAR ────────────────────────────────────── */
+#enemy-hp-wrap {
+  position: fixed; width: 60px; pointer-events: none; z-index: 200;
+  display: none;
+}
+#enemy-hp-bar {
+  height: 6px; background: #E8252A; border-radius: 3px;
+  transition: width 0.2s;
+  box-shadow: 0 0 6px rgba(232,37,42,0.6);
+}
+#enemy-hp-wrap::before {
+  content: '👾'; font-size: 0.7rem;
+  display: block; text-align: center; margin-bottom: 3px;
+}
+
 /* ── RESPONSIVE ──────────────────────────────────────── */
 @media (max-width: 768px) {
   #mobile-notice { display: block; }
